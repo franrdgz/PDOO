@@ -17,6 +17,7 @@ public class Prueba {
         // TODO code application logic here
         System.out.println("Primera salida");
            System.out.println("Segunda salida");
+        System.out.println("Tercera salida");
     }
     
 }
