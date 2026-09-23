@@ -9,5 +9,5 @@ package Directions;
  * @author fran-rdgz
  */
 public enum Orientation {
-    
+    VERTICAL, HORIZONTAL
 }
