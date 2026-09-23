@@ -41,7 +41,7 @@ public class GameState {
         return currentPlayer;
     }
        
-        public boolean getwinner(){
+        public boolean getWinner(){
         return winner;
     }
        
