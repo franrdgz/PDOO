@@ -14,11 +14,21 @@ public class Weapon {
     
     
     public Weapon (float p, int u){
-        power = p;
-        uses = u;
+        this.power = p;
+        this.uses = u;
     }
     
     public float attack (){
-        
+        if (this.uses > 0){
+            this.uses--;
+            return this.power;
+        }
+        else{
+            return 0.0f;
+        }
+    }
+    
+    public String toString (){
+        return "W[" + power + ", " + uses + "]";
     }
 }
