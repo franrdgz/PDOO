@@ -6,30 +6,28 @@ package irrgartenjava;
 
 /**
  *
- * @author fran-rdgz
+ * @author aaron
  */
-public class Weapon {
-    private float power;
-    private int uses; 
+public class Shield {
+    private float protection;
+    private int uses;
     
-    
-    public Weapon (float p, int u){
-        this.power = p;
+    public Shield(float p, int u) {
+        this.protection = p;
         this.uses = u;
     }
     
-    public float attack (){
-        if (this.uses > 0){
+    public float protect() {
+        if (this.uses > 0) {
             this.uses--;
-            return this.power;
-        }
-        else{
+            return this.protection;
+        } else {
             return 0.0f;
         }
     }
     
-    public String toString (){
-        return "W[" + power + ", " + uses + "]";
+    public String toString() {
+        return "S[" + protection + ", " + uses + "]";
     }
     
     public boolean discard() {
