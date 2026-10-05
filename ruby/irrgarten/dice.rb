@@ -21,7 +21,7 @@ module Irrgarten
          @@generator.rand(max)
       end
 
-       def self.eho_starts(nplayers)
+       def self.who_starts(nplayers)
          @@generator.rand(nplayers)
       end
 
