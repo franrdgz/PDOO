@@ -11,9 +11,4 @@ module Irrgarten
     VERTICAL = :vertical
     HORIZONTAL = :horizontal
   end
-
-  module GameCharacter
-    PLAYER = :player
-    MONSTER = :monster
-  end
 end
