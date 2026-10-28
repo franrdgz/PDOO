@@ -1,8 +1,8 @@
 #encoding:utf-8
 
-require_relative 'player'
+require_relative 'Player'
 require_relative 'monster'
-require_relative 'labyrinth'
+require_relative 'Labyrinth'
 require_relative 'game_state'
 require_relative 'dice'
 
