@@ -14,4 +14,4 @@ module Irrgarten
          @log = log
       end
    end
-ends
+end
