@@ -1,6 +1,6 @@
 #encoding:utf-8
 
-require_relative 'irrgarten/game'
+require_relative 'game'
 
 module Irrgarten
   class TestP2
