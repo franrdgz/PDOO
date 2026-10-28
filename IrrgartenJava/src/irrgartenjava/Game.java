@@ -32,7 +32,7 @@ public class Game {
         this.log = "";
         
         this.configureLabyrinth();
-        this.labyrinth.spreadPlayers(this.players);
+        //this.labyrinth.spreadPlayers(this.players);
     }
 
     public boolean finished() {
@@ -51,7 +51,7 @@ public class Game {
 
     public void configureLabyrinth() {
         // Inicialización básica de prueba; ajustar en función del laberinto final
-        labyrinth.addBlock(Orientation.VERTICAL, 1, 1, 3);
+        //labyrinth.addBlock(Orientation.VERTICAL, 1, 1, 3);
         Monster m1 = new Monster("Orc", 4.0f, 3.0f);
         this.monsters.add(m1);
         labyrinth.addMonster(2, 2, m1);
