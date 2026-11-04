@@ -37,7 +37,15 @@ module Irrgarten
     end
 
     def defend(received_attack)
-      # Pendiente P3
+      is_dead = dead
+      if !is_dead
+        defensive_energy = Dice.intensity(@intelligence)
+        if defensive_energy < received_attack
+          got_wounded
+          is_dead = dead
+        end
+      end
+      is_dead
     end
   end
 end

@@ -80,18 +80,81 @@ module Irrgarten
 
     # Cabeceras de métodos vacías pendientes para P3
     def next_step(preferred_direction)
+      @log = ""
+      is_dead = @current_player.dead
+      
+      if !is_dead
+        direction = actual_direction(preferred_direction)
+        if direction != preferred_direction
+          log_player_no_orders
+        end
+        
+        monster = @labyrinth.put_player(direction, @current_player)
+        if monster == nil
+          log_no_monster
+        else
+          winner = combat(monster)
+          manage_reward(winner)
+        end
+      else
+        manage_resurrection
+      end
+      
+      end_game = finished
+      if !end_game
+        next_player
+      end
+      
+      end_game
     end
 
     def actual_direction(preferred_direction)
+      current_row = @current_player.row
+      current_col = @current_player.col
+      valid_moves = @labyrinth.valid_moves(current_row, current_col)
+      @current_player.move(preferred_direction, valid_moves)
     end
 
     def combat(monster)
+      rounds = 0
+      winner = GameCharacter::PLAYER
+      player_attack = @current_player.attack
+      lose = monster.defend(player_attack)
+      
+      while !lose && rounds < @@MAX_ROUNDS
+        monster_attack = monster.attack
+        winner = GameCharacter::MONSTER
+        rounds += 1
+        lose = @current_player.defend(monster_attack)
+        
+        if !lose
+          player_attack = @current_player.attack
+          winner = GameCharacter::PLAYER
+          lose = monster.defend(player_attack)
+        end
+      end
+      
+      log_rounds(rounds, @@MAX_ROUNDS)
+      winner
     end
 
     def manage_reward(winner)
+      if winner == GameCharacter::PLAYER
+        @current_player.receive_reward
+        log_player_won
+      else
+        log_monster_won
+      end
     end
 
     def manage_resurrection
+      resurrect = Dice.resurrect_player
+      if resurrect
+        @current_player.resurrect
+        log_resurrected
+      else
+        log_player_skip_turn
+      end
     end
   end
 end
