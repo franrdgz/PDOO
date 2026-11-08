@@ -101,25 +101,60 @@ module Irrgarten
       end
     end
 
-    # Cabeceras
-    def spread_players(players)
-      raise NotImplementedError
-    end
 
-    def put_player(direction, player)
-      raise NotImplementedError
-    end
+  #P3 
+  def add_block(orientation, start_row, start_col, length)
+    row = start_row
+    col = start_col
+    inc_row = (orientation == Orientation::VERTICAL) ? 1 : 0
+    inc_col = (orientation == Orientation::HORIZONTAL) ? 1 : 0
 
-    def add_block(orientation, start_row, start_col, length)
-      raise NotImplementedError
-    end
-
-    def valid_moves(row, col)
-      raise NotImplementedError
-    end
-
-    def put_player_2d(old_row, old_col, row, col, player)
-      raise NotImplementedError
+    length.times do
+      if pos_ok(row,col) && empty_pos(row,col)
+        @labyrinth[row][col] = @@BLOCK_CHAR
+      end
+      row += inc_row
+      col += inc_col
     end
   end
+
+  def put_player(direction, player)
+    old_col = player.col
+    old_row = player.row
+    new_pos = dir_2_pos(old_row, old_col, direction)
+    put_player_2d(old_row, old_col,new_pos[0], new_pos[1], player)
+  end
+
+  def put_player_2d(old_row, old_col, ow, col, player)
+    output = nil
+    if can_step_on(row, col)
+      update_old_pos(old_row, old_col) if pos_ok(old_row, old_col)
+
+      if monster_pos(row, col)
+        @labyrinth[row][col] = @@COMBAT_CHAR
+        output = @monsters[row][col]
+      else
+        @labyrinth[row][col] = player.number
+      end
+
+      @players[row][col] = player
+      player.set_pos(row, col)
+    end
+    output
+  end
+  def spread_players(players)
+    players.each do |p|
+      pos = random_empty_pos
+      put_player_2d(-1, -1, pos[0], pos[1], p)
+    end
+  end
+
+  def valid_moves(row, col)
+    output = Array.new
+    output << Directions::UP if can_step_on(row - 1, col)
+    output << Directions::DOWN if can_step_on(row + 1, col)
+    output << Directions::LEFT if can_step_on(row, col - 1)
+    output << Directions::RIGTH if can_step_on(row, col + 1)
+  end
+end
 end

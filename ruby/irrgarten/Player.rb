@@ -78,25 +78,63 @@ module Irrgarten
       @shields.sum { |s| s.protect }
     end
 
-    # Cabeceras
-    def move(direction, valid_moves)
-      raise NotImplementedError
+  #P3
+  def manage_hit(recieved_attack)
+    defense = defensive_energy
+    if defense < recieved_attack
+      got_wounded
+      inc_consecutive_hits
+    else 
+      reset_hits
     end
 
-    def receive_reward
-      raise NotImplementedError
+    loser = (@consecutive_hits == @@HITS2LOSE) || dead
+    loser 
+  end
+
+  def move(direction, valid_moves)
+    size = valid_moves.size
+    contained = valid_moves.include?(direction)
+    if size > 0 && !contained
+      valid_moves[0]
+    else
+      direction
+    end
+  end
+
+  def recieved_reward
+    w_reward = Dice.weapons_reward
+    s_reward = Dice.shields_reward
+
+    w_reward.times { receive_weapon(new_weapon) }
+    s_reward.times { receive_shield(new_shield) }
+
+    extra_health = Dice.health_reward
+    @health += extra_health
+  end
+
+  def receive_weapon(w)
+    (@weapons.size - 1).downto(0) do  |i|
+      if @weapons[i].discard
+        @weapons.delete_at(i)
+      end
     end
 
-    def receive_weapon(w)
-      raise NotImplementedError
+    if @weapons.size < @@MAX_WEAPONS
+      @weapons << w
+    end
+  end
+
+  def receive_shield(s)
+    (@shields.size - 1).downto(0) do  |i|
+      if @shields[i].discard
+        @shields.delete_at(i)
+      end
     end
 
-    def receive_shield(s)
-      raise NotImplementedError
-    end
-
-    def manage_hit(received_attack)
-      raise NotImplementedError
+      if @shields.size < @@MAX_SHIELDS
+        @shields << s
+      end
     end
   end
 end
