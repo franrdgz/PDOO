@@ -110,22 +110,58 @@ public class Player {
 
     // Cabeceras de métodos pendientes para la Práctica 3
     public Directions move(Directions direction, ArrayList<Directions> validMoves) {
-        throw new UnsupportedOperationException();
+        int size = validMoves.size();
+        boolean contained = validMoves.contains(direction);
+        if (size > 0 && !contained) {
+            return validMoves.get(0);
+        } else {
+            return direction;
+        }
     }
 
     public void receiveReward() {
-        throw new UnsupportedOperationException();
+        int wReward = Dice.weaponsReward();
+        int sReward = Dice.shieldsReward();
+        for (int i = 0; i < wReward; i++) {
+            receiveWeapon(newWeapon());
+        }
+        for (int i = 0; i < sReward; i++) {
+            receiveShield(newShield());
+        }
+        int extraHealth = Dice.healthReward();
+        health += extraHealth;
     }
 
     public void receiveWeapon(Weapon w) {
-        throw new UnsupportedOperationException();
+        for (int i = weapons.size() - 1; i >= 0; i--) {
+            if (weapons.get(i).discard()) {
+                weapons.remove(i);
+            }
+        }
+        if (weapons.size() < MAX_WEAPONS) {
+            weapons.add(w);
+        }
     }
 
     public void receiveShield(Shield s) {
-        throw new UnsupportedOperationException();
+        for (int i = shields.size() - 1; i >= 0; i--) {
+            if (shields.get(i).discard()) {
+                shields.remove(i);
+            }
+        }
+        if (shields.size() < MAX_SHIELDS) {
+            shields.add(s);
+        }
     }
 
     public boolean manageHit(float receivedAttack) {
-        throw new UnsupportedOperationException();
+        float defense = defensiveEnergy();
+        if (defense < receivedAttack) {
+            gotWounded();
+            incConsecutiveHits();
+        } else {
+            resetHits();
+        }
+        return (consecutiveHits == HITS_2_LOSE) || dead();
     } 
 }
