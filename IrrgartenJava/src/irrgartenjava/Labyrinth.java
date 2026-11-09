@@ -195,4 +195,5 @@ public class Labyrinth {
         if (canStepOn(row, col + 1)) output.add(Directions.RIGHT);
         return output;
     }
+   
 }   

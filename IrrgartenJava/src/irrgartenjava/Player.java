@@ -164,4 +164,16 @@ public class Player {
         }
         return (consecutiveHits == HITS_2_LOSE) || dead();
     } 
+    
+    public int getRow() {
+        return this.row;
+    }
+
+    public int getCol() {
+        return this.col;
+    }
+    
+    public char getNumber() {
+        return this.number;
+    }
 }
