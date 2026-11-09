@@ -5,6 +5,7 @@ require_relative 'monster'
 require_relative 'Labyrinth'
 require_relative 'game_state'
 require_relative 'dice'
+require_relative 'game_character'
 
 module Irrgarten
   class Game
@@ -23,26 +24,34 @@ module Irrgarten
       @log = ""
 
       # Creamos un laberinto de prueba (ej. 5x5 con salida en (4,4))
-      @labyrinth = Labyrinth.new(5, 5, 4, 4)
+      @labyrinth = Labyrinth.new(10, 10, 9, 9)
 
       configure_labyrinth
+      @labyrinth.spread_players(@players)
     end
 
     def finished
       @labyrinth.have_a_winner
     end
 
-    def get_game_state
+    def game_state
       players_str = @players.map(&:to_s).join(", ")
       monsters_str = @monsters.map(&:to_s).join(", ")
       GameState.new(@labyrinth.to_s, players_str, monsters_str, @current_player_index, finished, @log)
     end
 
     def configure_labyrinth
-      # Método sencillo para configurar el laberinto añadiendo obstáculos y monstruos
-      m = Monster.new("Monster 1", Dice.random_intelligence, Dice.random_strength)
-      @monsters << m
-      @labyrinth.add_monster(2, 2, m)
+      @labyrinth.add_block(Orientation::VERTICAL, 1, 1, 3)
+      @labyrinth.add_block(Orientation::HORIZONTAL, 4, 2, 4)
+      
+      # Monstruos
+      m1 = Monster.new("Orc", 4.0, 3.0)
+      @monsters << m1
+      @labyrinth.add_monster(2, 2, m1)
+      
+      m2 = Monster.new("Goblin", 3.0, 2.0)
+      @monsters << m2
+      @labyrinth.add_monster(5, 5, m2)
     end
 
     def next_player
@@ -140,7 +149,7 @@ module Irrgarten
 
     def manage_reward(winner)
       if winner == GameCharacter::PLAYER
-        @current_player.receive_reward
+        @current_player.received_reward
         log_player_won
       else
         log_monster_won

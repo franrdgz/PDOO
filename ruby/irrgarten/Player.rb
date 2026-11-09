@@ -1,5 +1,10 @@
+require_relative 'weapon'
+require_relative 'shield'
+require_relative 'dice'
+
 module Irrgarten
   class Player
+    attr_reader :row, :col, :number
     @@MAX_WEAPONS = 2
     @@MAX_SHIELDS = 3
     @@INITIAL_HEALTH = 10
@@ -102,7 +107,7 @@ module Irrgarten
     end
   end
 
-  def recieved_reward
+  def received_reward
     w_reward = Dice.weapons_reward
     s_reward = Dice.shields_reward
 

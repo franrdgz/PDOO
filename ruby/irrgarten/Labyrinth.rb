@@ -125,27 +125,30 @@ module Irrgarten
     put_player_2d(old_row, old_col,new_pos[0], new_pos[1], player)
   end
 
-  def put_player_2d(old_row, old_col, ow, col, player)
+  def put_player_2d(old_row, old_col, row, col, player)
     output = nil
-    if can_step_on(row, col)
-      update_old_pos(old_row, old_col) if pos_ok(old_row, old_col)
-
-      if monster_pos(row, col)
-        @labyrinth[row][col] = @@COMBAT_CHAR
-        output = @monsters[row][col]
-      else
-        @labyrinth[row][col] = player.number
+      if can_step_on(row, col)
+        if pos_ok(old_row, old_col)
+          update_old_pos(old_row, old_col)
+        end
+        
+        monster = monster_pos(row, col)
+        if monster
+          @labyrinth[row][col] = @@COMBAT_CHAR
+          output = @monsters[row][col]
+        else
+          @labyrinth[row][col] = player.number
+        end
+        
+        @players[row][col] = player
+        player.set_pos(row, col)
       end
-
-      @players[row][col] = player
-      player.set_pos(row, col)
-    end
-    output
+      output
   end
   def spread_players(players)
-    players.each do |p|
-      pos = random_empty_pos
-      put_player_2d(-1, -1, pos[0], pos[1], p)
+    players.each do |player|
+        pos = random_empty_pos
+        put_player_2d(-1, -1, pos[@@ROW], pos[@@COL], player)
     end
   end
 
@@ -154,7 +157,8 @@ module Irrgarten
     output << Directions::UP if can_step_on(row - 1, col)
     output << Directions::DOWN if can_step_on(row + 1, col)
     output << Directions::LEFT if can_step_on(row, col - 1)
-    output << Directions::RIGTH if can_step_on(row, col + 1)
+    output << Directions::RIGHT if can_step_on(row, col + 1)
+    output
   end
 end
 end
