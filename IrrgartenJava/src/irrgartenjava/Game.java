@@ -32,7 +32,7 @@ public class Game {
         this.log = "";
         
         this.configureLabyrinth();
-        //this.labyrinth.spreadPlayers(this.players);
+        this.labyrinth.spreadPlayers(this.players);
     }
 
     public boolean finished() {
@@ -50,11 +50,23 @@ public class Game {
     }
 
     public void configureLabyrinth() {
-        // Inicialización básica de prueba; ajustar en función del laberinto final
-        //labyrinth.addBlock(Orientation.VERTICAL, 1, 1, 3);
+
+        labyrinth.addBlock(Orientation.VERTICAL, 1, 1, 3);
+        labyrinth.addBlock(Orientation.HORIZONTAL, 4, 2, 4);
+        labyrinth.addBlock(Orientation.VERTICAL, 6, 8, 3);
+
+        // Monstruos
         Monster m1 = new Monster("Orc", 4.0f, 3.0f);
         this.monsters.add(m1);
         labyrinth.addMonster(2, 2, m1);
+
+        Monster m2 = new Monster("Goblin", 3.0f, 2.0f);
+        this.monsters.add(m2);
+        labyrinth.addMonster(5, 5, m2);
+
+        Monster m3 = new Monster("Troll", 6.0f, 5.0f);
+        this.monsters.add(m3);
+        labyrinth.addMonster(8, 2, m3);
     }
 
     public void nextPlayer() {
