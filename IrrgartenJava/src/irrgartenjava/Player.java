@@ -8,64 +8,55 @@ import java.util.ArrayList;
  *
  * @author fran-rdgz
  */
-public class Player {
+public class Player extends LabyrinthCharacter{
     private static final int MAX_WEAPONS = 2;
     private static final int MAX_SHIELDS = 3;
     private static final int INITIAL_HEALTH = 10;
     private static final int HITS_2_LOSE = 3;
 
-    private String name;
     private char number;
-    private float intelligence;
-    private float strength;
-    private float health;
-    private int row;
-    private int col;
     private int consecutiveHits;
 
     private ArrayList<Weapon> weapons;
     private ArrayList<Shield> shields;
 
     public Player(char number, float intelligence, float strength) {
+        super("Player #" + number, intelligence, strength, INITIAL_HEALTH);
         this.number = number;
-        this.name = "Player #" + number;
-        this.intelligence = intelligence;
-        this.strength = strength;
-        this.health = INITIAL_HEALTH;
-        this.row = -1;
-        this.col = -1;
         this.consecutiveHits = 0;
         this.weapons = new ArrayList<>();
         this.shields = new ArrayList<>();
+    }
+    
+    public Player(Player other) {
+        super(other);
+        this.number = other.number;
+        this.consecutiveHits = other.consecutiveHits;
+        this.weapons = new ArrayList<>(other.weapons);
+        this.shields = new ArrayList<>(other.shields);
     }
 
     public void resurrect() {
         this.weapons.clear();
         this.shields.clear();
-        this.health = INITIAL_HEALTH;
+        setHealth(INITIAL_HEALTH);
         this.consecutiveHits = 0;
     }
 
-    public void setPos(int row, int col) {
-        this.row = row;
-        this.col = col;
-    }
-
-    public boolean dead() {
-        return this.health <= 0;
-    }
-
+    @Override
     public float attack() {
-        return this.strength + this.sumWeapons();
+        return getStrength() + this.sumWeapons();
     }
 
+    @Override
     public boolean defend(float receivedAttack) {
         return this.manageHit(receivedAttack);
     }
 
+    @Override
     public String toString() {
-        return "P[" + name + ", H:" + health + ", S:" + strength + ", I:" + intelligence 
-             + ", Pos:(" + row + "," + col + "), Hits:" + consecutiveHits + "]";
+        return "P[" + super.toString() + ", Hits:" + consecutiveHits
+             + ", Weapons:" + weapons.size() + ", Shields:" + shields.size() + "]";
     }
 
     private Weapon newWeapon() {
@@ -77,15 +68,11 @@ public class Player {
     }
 
     protected float defensiveEnergy() {
-        return this.intelligence + this.sumShields();
+        return getIntelligence() + this.sumShields();
     }
 
     private void resetHits() {
         this.consecutiveHits = 0;
-    }
-
-    private void gotWounded() {
-        this.health--;
     }
 
     private void incConsecutiveHits() {
@@ -108,7 +95,6 @@ public class Player {
         return totalProtect;
     }
 
-    // Cabeceras de métodos pendientes para la Práctica 3
     public Directions move(Directions direction, ArrayList<Directions> validMoves) {
         int size = validMoves.size();
         boolean contained = validMoves.contains(direction);
@@ -129,7 +115,7 @@ public class Player {
             receiveShield(newShield());
         }
         int extraHealth = Dice.healthReward();
-        health += extraHealth;
+        setHealth(getHealth() + extraHealth);
     }
 
     public void receiveWeapon(Weapon w) {
@@ -163,16 +149,8 @@ public class Player {
             resetHits();
         }
         return (consecutiveHits == HITS_2_LOSE) || dead();
-    } 
-    
-    public int getRow() {
-        return this.row;
     }
 
-    public int getCol() {
-        return this.col;
-    }
-    
     public char getNumber() {
         return this.number;
     }

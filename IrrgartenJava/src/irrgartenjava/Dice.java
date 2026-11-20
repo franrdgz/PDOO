@@ -4,6 +4,7 @@
  */
 package irrgartenjava;
 import java.util.Random;
+import java.util.ArrayList;
 /**
  *
  * @author aaron
@@ -79,5 +80,17 @@ public class Dice {
         }
         float prob = (float) (MAX_USES - usesLeft) / MAX_USES;
         return generator.nextFloat() < prob;
-    } 
+    }
+    
+    public static Directions nextStep(Directions preference, ArrayList<Directions> validMoves, float intelligence) {
+    if (validMoves == null || validMoves.isEmpty()) {
+        return preference;
+    }
+    float prob = intelligence / MAX_INTELLIGENCE;
+    if (generator.nextFloat() < prob) {
+        return preference;
+    }
+    int index = generator.nextInt(validMoves.size());
+    return validMoves.get(index);
+    }
 }

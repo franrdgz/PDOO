@@ -8,59 +8,33 @@ package irrgartenjava;
  *
  * @author aaron
  */
-public class Monster {
-    private static final int INITIAL_HEALTH = 5;
-    // Atributo de clase añadido para representar posición inválida
-    private static final int INVALID_POS = -1;
-
-    private String name;
-    private float intelligence;
-    private float strength;
-    private int health;
-    private int row;
-    private int col;
+public class Monster extends LabyrinthCharacter {
+    private static final float INITIAL_HEALTH = 5.0f;
 
     public Monster(String name, float intelligence, float strength) {
-        this.name = name;
-        this.intelligence = intelligence;
-        this.strength = strength;
-        this.health = INITIAL_HEALTH;
-        this.row = INVALID_POS;
-        this.col = INVALID_POS;
+        super(name, intelligence, strength, INITIAL_HEALTH);
     }
 
-    public boolean dead() {
-        return this.health <= 0;
-    }
-
+    @Override
     public float attack() {
-        return Dice.intensity(this.strength);
+        return Dice.intensity(getStrength());
     }
 
-    public void setPos(int row, int col) {
-        this.row = row;
-        this.col = col;
-    }
-
-    public String toString() {
-        return "Monster[name=" + name + ", health=" + health + 
-               ", intelligence=" + intelligence + ", strength=" + strength + 
-               ", pos=(" + row + "," + col + ")]";
-    }
-
-    public void gotWounded() {
-        this.health -= 1;
-    }
-
+    @Override
     public boolean defend(float receivedAttack) {
         boolean isDead = dead();
         if (!isDead) {
-            float defensiveEnergy = Dice.intensity(intelligence);
+            float defensiveEnergy = Dice.intensity(getIntelligence());
             if (defensiveEnergy < receivedAttack) {
                 gotWounded();
                 isDead = dead();
             }
         }
         return isDead;
+    }
+
+    @Override
+    public String toString() {
+        return "Monster[" + super.toString() + "]";
     }
 }
