@@ -142,4 +142,20 @@ module Irrgarten
       end
     end
   end
+
+  def copy(other)
+  super(other) if defined?(super)
+  @name = other.instance_variable_get(:@name)
+  @number = other.number
+  @intelligence = other.instance_variable_get(:@intelligence)
+  @strength = other.instance_variable_get(:@strength)
+  @health = other.instance_variable_get(:@health)
+  @row = other.row
+  @col = other.col
+  @consecutive_hits = other.instance_variable_get(:@consecutive_hits)
+  @weapons = other.instance_variable_get(:@weapons).dup
+  @shields = other.instance_variable_get(:@shields).dup
+  self
+  end
+  
 end

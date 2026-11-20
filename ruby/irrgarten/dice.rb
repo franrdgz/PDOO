@@ -70,5 +70,12 @@ module Irrgarten
          prob = 1.0 - (uses_left.to_f / MAX_USES)
          @@generator.rand < prob
       end
+      
+      def self.next_step(preference, valid_moves, intelligence)
+         return preference if valid_moves.nil? || valid_moves.empty?
+         prob = intelligence.to_f / MAX_INTELLIGENCE
+         return preference if @@generator.rand < prob
+         valid_moves[@@generator.rand(valid_moves.size)]
+      end
    end
 end

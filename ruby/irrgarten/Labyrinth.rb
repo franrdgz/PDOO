@@ -160,5 +160,17 @@ module Irrgarten
     output << Directions::RIGHT if can_step_on(row, col + 1)
     output
   end
+
+  def replace_player(player)
+  r = player.row
+  c = player.col
+  if pos_ok(r, c) && !@players[r][c].nil?
+    @players[r][c] = player
+    if @labyrinth[r][c] != @@COMBAT_CHAR && @labyrinth[r][c] != @@EXIT_CHAR
+      @labyrinth[r][c] = player.number
+    end
+  end
+  end
+
 end
 end
